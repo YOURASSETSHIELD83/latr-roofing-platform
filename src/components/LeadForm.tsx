@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle, Home } from 'lucide-react';
 
 interface FormData {
@@ -41,26 +42,26 @@ export default function LeadForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
-
-    // Build mailto link for direct email delivery
-    const subject = encodeURIComponent(`LATR Consulting - Free Roof Inspection Request from ${form.name}`);
-    const body = encodeURIComponent(
-      `NEW INSPECTION REQUEST — LATR Consulting LLC\n\n` +
-      `Name: ${form.name}\n` +
-      `Phone: ${form.phone}\n` +
-      `Email: ${form.email}\n` +
-      `Property Address: ${form.address}\n` +
-      `Service Needed: ${form.service}\n\n` +
-      `Message:\n${form.message}\n\n` +
-      `---\nSubmitted via lookatthatroof.com`
-    );
-
-    // Simulate a brief send delay then open mailto
-    setTimeout(() => {
-      window.location.href = `mailto:iculooking24.7@gmail.com?subject=${subject}&body=${body}`;
+    try {
+      await emailjs.send(
+        'service_7p3lqp4',
+        'template_vdxnk7f',
+        {
+          form_type: 'Free Roof Inspection Request',
+          from_name: form.name,
+          reply_to: form.email || 'No email provided',
+          phone: form.phone,
+          address: form.address,
+          service: form.service || 'Not specified',
+          message: form.message || 'No additional notes',
+        },
+        'DoxSKYkbZSYPgpM7D'
+      );
       setStatus('success');
       setForm(initialForm);
-    }, 800);
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
