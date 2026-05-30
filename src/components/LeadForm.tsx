@@ -49,11 +49,14 @@ export default function LeadForm() {
         {
           form_type: 'Free Roof Inspection Request',
           from_name: form.name,
+          name: form.name,
           reply_to: form.email || 'No email provided',
+          email: form.email || 'No email provided',
           phone: form.phone,
           address: form.address,
           service: form.service || 'Not specified',
-          message: form.message || 'No additional notes',
+          message: `Phone: ${form.phone}\nEmail: ${form.email || 'Not provided'}\nAddress: ${form.address}\nService: ${form.service || 'Not specified'}\nNotes: ${form.message || 'None'}`,
+          title: 'Free Roof Inspection Request',
         },
         'DoxSKYkbZSYPgpM7D'
       );
