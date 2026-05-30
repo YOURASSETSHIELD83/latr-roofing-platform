@@ -45,7 +45,7 @@ export default function LeadForm() {
     try {
       await emailjs.send(
         'service_7p3lqp4',
-        'template_vdxnk7f',
+        'template_hanssip',
         {
           form_type: 'Free Roof Inspection Request',
           from_name: form.name,
