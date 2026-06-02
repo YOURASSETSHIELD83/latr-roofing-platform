@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import emailjs from '@emailjs/browser';
 import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle, Home } from 'lucide-react';
 
 interface FormData {
@@ -43,23 +42,19 @@ export default function LeadForm() {
     e.preventDefault();
     setStatus('sending');
     try {
-      await emailjs.send(
-        'service_7p3lqp4',
-        'template_hanssip',
-        {
-          form_type: 'Free Roof Inspection Request',
-          from_name: form.name,
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           name: form.name,
-          reply_to: form.email || 'No email provided',
-          email: form.email || 'No email provided',
           phone: form.phone,
+          email: form.email,
           address: form.address,
-          service: form.service || 'Not specified',
-          message: `Phone: ${form.phone}\nEmail: ${form.email || 'Not provided'}\nAddress: ${form.address}\nService: ${form.service || 'Not specified'}\nNotes: ${form.message || 'None'}`,
-          title: 'Free Roof Inspection Request',
-        },
-        'DoxSKYkbZSYPgpM7D'
-      );
+          service: form.service,
+          message: form.message,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed');
       setStatus('success');
       setForm(initialForm);
     } catch {
